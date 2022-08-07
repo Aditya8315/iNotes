@@ -41,10 +41,10 @@ router.post('/createuser', [
           }
           const authtoken = jwt.sign(data, JWT_SECRET);
           success=true;
-          res.json({ success,authtoken })
+          res.json({ success:success,authtoken:authtoken })
      } catch (error) {
-          console.log(error.message);
-          res.status(500).send(success,"some error occured");
+          // console.log(error.message);
+          res.status(500).send({success:success,error:"some error occured"});
 
      }
 })//-------------------------------------------------------------------------------------------------------------------
@@ -63,11 +63,11 @@ router.post('/login', [
      try {
           let user = await User.findOne({ email });
           if (!user) {
-               return res.status(400).json({ success,error: "Enter correct email" });
+               return res.status(400).json({ success:success,error: "Enter correct email" });
           }
           const passwordcompare = await bcrypt.compare(password, user.password);
           if (!passwordcompare) {
-               return res.status(400).json({success, error: "Enter correct password" });
+               return res.status(400).json({success:success, error: "Enter correct password" });
           }
           const data = {
                user: {
@@ -76,10 +76,10 @@ router.post('/login', [
           }
           const authtoken = jwt.sign(data, JWT_SECRET);
           success=true;
-          res.json({success, authtoken })
+          res.json({success:success, authtoken:authtoken })
 
      } catch (error) {
-          console.log(error.message);
+          // console.log(error.message);
           res.status(500).send("some error occured");
      }
 })
@@ -93,7 +93,7 @@ router.post('/getuser', fetchuser, async (req, res) => {
           res.send(user);
 
      } catch (error) {
-          console.log(error);
+          // console.log(error);
           res.status(501).send({ error: "Internal server error" });
      }
 })
